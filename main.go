@@ -53,6 +53,10 @@ func main() {
 	// })
 
 	noteControllers := &controllers.NoteController{}
-	noteControllers.InitNotesController(router, *notesService)
+	noteControllers.InitController(*notesService)
+	noteControllers.InitRoute(router)
+
+	authController := controllers.InitAuthController()
+	authController.InitRoute(router)
 	router.Run(":8000") //listen and server on 0.0.0.0:8080
 }

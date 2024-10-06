@@ -41,3 +41,20 @@ func (n *NotesService) CreateNotesService(title string, status bool) (*internal.
 	}
 	return note, nil
 }
+
+func (n *NotesService) UpdateNotesService(title string, status bool, id int) (*internal.Notes, error) {
+	var node *internal.Notes
+
+	if err := n.db.Where("id=?", id).Find(&node).Error; err != nil {
+		return nil, err
+	}
+
+	node.Title = title
+	node.Status = status
+
+	if err := n.db.Create(&node).Error; err != nil {
+		fmt.Print(err)
+		return nil, err
+	}
+	return node, nil
+}
