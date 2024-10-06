@@ -1,0 +1,5 @@
+1. Init project
+   - go mod init root-folder-name
+2. Install package 
+   - go get .
+    
