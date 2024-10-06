@@ -2,10 +2,9 @@ package services
 
 import (
 	"fmt"
+	internal "ginapi/internal/models"
 
 	"gorm.io/gorm"
-
-	internal "ginapi/internal/models"
 )
 
 type NotesService struct {
@@ -14,7 +13,7 @@ type NotesService struct {
 
 func (n *NotesService) InitService(database *gorm.DB) {
 	n.db = database
-	n.db.AutoMigrate(&internal.Notes{})
+	//n.db.AutoMigrate(&internal.Notes{})
 }
 
 type Note struct {
@@ -22,20 +21,23 @@ type Note struct {
 	Name string
 }
 
-func (n *NotesService) GetNoteService() []Note {
-	data := []Note{
-		{Id: 1, Name: "Note 1"},
-		{Id: 2, Name: "Note 2"},
+func (n *NotesService) GetNotesSrvices() ([]*internal.Notes, error) {
+	var notes []*internal.Notes
+	if err := n.db.Find(&notes).Error; err != nil {
+		return nil, err
+	}
+	return notes, nil
+}
+
+func (n *NotesService) CreateNotesService(title string, status bool) (*internal.Notes, error) {
+	note := &internal.Notes{
+		Title:  title,
+		Status: status,
 	}
 
-	err := n.db.Create(&internal.Notes{
-		Id:     2,
-		Title:  "Aziz",
-		Status: true,
-	})
-
-	if err != nil {
-		fmt.Println("DB created failed", err)
+	if err := n.db.Create(note).Error; err != nil {
+		fmt.Print(err)
+		return nil, err
 	}
-	return data
+	return note, nil
 }
