@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ginapi/services"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,11 +21,21 @@ func (n *NoteController) InitNotesController(router *gin.Engine, notesService se
 
 func (n *NoteController) GetNotes() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		notes, err := n.notesService.GetNotesSrvices()
+		status := ctx.Query("status")
+		actualStatus, err := strconv.ParseBool(status)
 		if err != nil {
 			ctx.JSON(400, gin.H{
 				"message": err.Error(),
 			})
+			return
+		}
+		notes, err := n.notesService.GetNotesSrvices(actualStatus)
+
+		if err != nil {
+			ctx.JSON(400, gin.H{
+				"message": err.Error(),
+			})
+			return
 		}
 		ctx.JSON(200, gin.H{
 			"message": "Success",
