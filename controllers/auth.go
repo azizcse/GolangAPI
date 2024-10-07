@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ginapi/internal/utils"
 	"ginapi/services"
 
 	"github.com/gin-gonic/gin"
@@ -42,9 +43,7 @@ func (a *AuthController) Login() gin.HandlerFunc {
 			})
 			return
 		}
-		ctx.JSON(200, gin.H{
-			"message": user,
-		})
+		ctx.JSON(200, utils.BuildResponse_("Success", "Message success", user))
 	}
 }
 
@@ -68,8 +67,6 @@ func (a *AuthController) Register() gin.HandlerFunc {
 			})
 			return
 		}
-		ctx.JSON(200, gin.H{
-			"message": user,
-		})
+		ctx.JSON(200, utils.BuildResponse_("Success", "Message success", user))
 	}
 }
