@@ -1,4 +1,4 @@
-package internal
+package model
 
 type Notes struct {
 	Id     int    `gorm:"primaryKey"`

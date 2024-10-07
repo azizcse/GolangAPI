@@ -19,9 +19,6 @@ func main() {
 		fmt.Println("Database is not init properly")
 	}
 
-	notesService := &services.NotesService{}
-	notesService.InitService(db)
-
 	// router.GET("/ping", func(c *gin.Context) {
 	// 	c.JSON(http.StatusOK, gin.H{
 	// 		"mesage": "Hello gin yy",
@@ -51,12 +48,14 @@ func main() {
 	// 		"password": meRequest.Password,
 	// 	})
 	// })
-
+	notesService := &services.NotesService{}
+	notesService.InitService(db)
 	noteControllers := &controllers.NoteController{}
 	noteControllers.InitController(*notesService)
 	noteControllers.InitRoute(router)
 
-	authController := controllers.InitAuthController()
+	authService := services.InitAuthService(db)
+	authController := controllers.InitAuthController(authService)
 	authController.InitRoute(router)
 	router.Run(":8000") //listen and server on 0.0.0.0:8080
 }
